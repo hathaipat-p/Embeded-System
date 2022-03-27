@@ -4,14 +4,17 @@
 #define I2C_ADDR 0x4D
 
 #include <WiFi.h>
-#include "ThingSpeak.h"
+#include <HTTPClient.h>
 
-char ssid[] = "POM";   // network SSID (name) 
-char pass[] = "0800778528";   // network password
-WiFiClient  client;
+char ssid[] = "ssid";          // network SSID (name) 
+char pass[] = "pass";   // network password
 
-unsigned long myChannelNumber = 1680083;
-const char * myWriteAPIKey = "N4O5I6EVETMLHVBN";
+WiFiClient client;
+HTTPClient http;
+
+// Domain Name with full URL Path for HTTP POST Request
+const char* serverName = "http://api.thingspeak.com/update";
+String APIKey = "N4O5I6EVETMLHVBN";
 
 float temperatureC;
 int light;
@@ -19,11 +22,16 @@ int light;
 void setup() {
   Wire.begin(I2C_SDA, I2C_SCL);
   Serial.begin(115200);
-  while (!Serial) {
-    ; // wait for serial port to connect
+
+  WiFi.begin(ssid, pass);
+  Serial.println("Connecting");
+  while(WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
   }
-  WiFi.mode(WIFI_STA);
-  ThingSpeak.begin(client);  // Initialize ThingSpeak
+  Serial.println("");
+  Serial.print("Connected to WiFi network with IP Address: ");
+  Serial.println(WiFi.localIP());
 }
 
 void loop() {
@@ -33,30 +41,20 @@ void loop() {
   
   Serial.println("--------------------------------");
   Serial.printf("Temperature : %f degree celcius\n", temperatureC);
-  Serial.printf("Light : %d lux\n", light);
+  Serial.printf("Light : %d \n", light);
   
-//   Connect to WiFi
-  if(WiFi.status() != WL_CONNECTED){
-    Serial.print("Connecting... ");
-    while(WiFi.status() != WL_CONNECTED){
-      WiFi.begin(ssid, pass); 
-      Serial.print(".");
-      delay(5000);     
-    } 
-    Serial.print("Wifi connected, IP address: ");
-    Serial.println(WiFi.localIP());
-  }
-
-  // set the fields with the values
-  ThingSpeak.setField(1, temperatureC);
-  ThingSpeak.setField(2, light);
-
-  int x = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
-  if(x == 200){
-    Serial.println("Channel update successful.");
-  }
-  else{
-    Serial.println("Problem updating channel. HTTP error code " + String(x));
+  if(WiFi.status()== WL_CONNECTED){
+    http.begin(client, serverName);
+    
+    // Specify content-type header
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    // Data to send with HTTP POST
+    // payload = api_key=APIKEY&field1=Temp&feild2=Light
+    String httpRequestData = "api_key=" + APIKey + "&field1=" + String(temperatureC) + "&field2=" + String(light);     
+    // Send HTTP POST request
+    int httpResponseCode = http.POST(httpRequestData);
+    Serial.print("HTTP Response code: ");
+    Serial.println(httpResponseCode);
   }
   delay(5000);
 }
