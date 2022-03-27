@@ -72,7 +72,7 @@ void loop() {
 
 void mqttconnect(){
   if (client.connect((char*) clientName.c_str())) {
-    if (client.publish(topic, "hello from ESP8266")) {
+    if (client.publish(topic, "hello from ESP32")) {
       Serial.println("Publish ok");
     }
     else {
