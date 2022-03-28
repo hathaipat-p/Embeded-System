@@ -1,3 +1,4 @@
+// ESP32
 #include <Wire.h>
 #define I2C_SDA 4
 #define I2C_SCL 5
@@ -14,7 +15,7 @@ HTTPClient http;
 
 // Domain Name with full URL Path for HTTP POST Request
 const char* serverName = "http://api.thingspeak.com/update";
-String APIKey = "N4O5I6EVETMLHVBN";
+String APIKey = "xxxxxxxxxxxxxxxx";
 
 float temperatureC;
 int light;
