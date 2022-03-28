@@ -1,3 +1,4 @@
+//ESP32
 #include <Wire.h>
 #define I2C_SDA 4
 #define I2C_SCL 5
@@ -6,10 +7,10 @@
 #include "PubSubClient.h"
 #include <WiFi.h>  
 
-const char* ssid = "POM";
-const char* password = "0800778528";
+const char* ssid = "ssid";
+const char* password = "pass";
 //char* topic="channels/<channelID/publish/<channelAPI>
-char* topic = "channels/1680083/publish/N4O5I6EVETMLHVBN"; 
+char* topic = "channels/xxxxxxx/publish/xxxxxxxxxxxxxxxx"; 
 char* server = "mqtt.thingspeak.com";
 String clientName="ESP-Thingspeak";
 
