@@ -1,3 +1,5 @@
+//ESP32 Temperature Sensor notify via Line application
+
 #include <Wire.h>
 #define I2C_SDA 4
 #define I2C_SCL 5
@@ -5,12 +7,11 @@
 #include <TridentTD_LineNotify.h>
 #include <WiFi.h>
 
-#define LINE_TOKEN  "aiMrxdEESK9zqof7STDcDcqbsLI7KSWBs92q9hqJ6Ik"   // token line notify
+#define LINE_TOKEN  "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"   // token line notify
 
-char ssid[] = "POM";          // network SSID (name) 
-char pass[] = "0800778528";   // network password
+char ssid[] = "xxxx";   // wifi SSID (name) 
+char pass[] = "xxxx";   // wifi password
 
-WiFiClient  client;
 
 float temperatureC;
 
